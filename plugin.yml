@@ -20,3 +20,6 @@ commands:
   sethome:
     description: "Ustawiasz home"
     usage: /sethome
+  home:
+    description: "Tepasz się do home"
+    usage: /home

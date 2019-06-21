@@ -1,11 +1,10 @@
 package me.jokur.nauka;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.apache.commons.lang.UnhandledException;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -23,6 +22,8 @@ import org.bukkit.event.vehicle.VehicleUpdateEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.WeatherEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.text.ParseException;
 
 public class MatiPlugin extends JavaPlugin implements Listener {
 
@@ -43,8 +44,8 @@ public class MatiPlugin extends JavaPlugin implements Listener {
         getCommand("dzien").setExecutor(new CommandDzien());
         getCommand("noc").setExecutor(new CommandNoc());
         getCommand("gm").setExecutor(new CommandGm());
-        getCommand("sethome").setExecutor(new SethomeCommand());
-
+        getCommand("sethome").setExecutor(this);
+        getCommand("home").setExecutor(this);
     }
 
     @Override
@@ -96,5 +97,53 @@ public class MatiPlugin extends JavaPlugin implements Listener {
             }
         }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("sethome")) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+                String uuid = p.getUniqueId().toString();
+                getConfig().set(uuid + ".uuid", uuid);
+                getConfig().set(uuid + ".world", p.getLocation().getWorld().getName());
+                getConfig().set(uuid + ".x", p.getLocation().getX());
+                getConfig().set(uuid + ".y", p.getLocation().getY());
+                getConfig().set(uuid + ".z", p.getLocation().getZ());
+                getConfig().set(uuid + ".pitch", p.getEyeLocation().getPitch());
+                getConfig().set(uuid + ".yaw", p.getEyeLocation().getYaw());
+                sender.sendMessage(ChatColor.GREEN + "Ustawiłeś home");
+                return true;
+            }
+            else {
+                sender.sendMessage("Tylko gracze moga uzywac tej komendy");
+                return true;
+            }
+        }
+        if(command.getName().equalsIgnoreCase("home")) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+                String uid = getConfig().getString(p.getUniqueId().toString() + ".uuid");
+                try {
+                    World w = Bukkit.getServer().getWorld(getConfig().getString(uid + ".world"));
+                    double x = getConfig().getDouble(uid + ".x");
+                    double y = getConfig().getDouble(uid + ".y");
+                    double z = getConfig().getDouble(uid + ".z");
+                    double pitch = getConfig().getDouble(uid + ".pitch");
+                    double yaw = getConfig().getDouble(uid + ".yaw");
+                    p.teleport(new Location(w,x,y,z,(float)pitch,(float)yaw));
+                    sender.sendMessage(ChatColor.WHITE + "Ah Shit, Here We Go Again");
+                    return true;
+                }
+                catch (Exception e){
+                    p.sendMessage(ChatColor.AQUA + "Nie masz ustawionego homa");
+                    p.sendMessage(ChatColor.YELLOW + "Możesz to zrobić za pomocą komendy " + ChatColor.WHITE + "/sethome");
+                    return true;
+                }
+            }
+            else {
+                sender.sendMessage("Tylko gracze moga uzywac tej komendy");
+            }
+        }
+        return true;
+    }
 
 }

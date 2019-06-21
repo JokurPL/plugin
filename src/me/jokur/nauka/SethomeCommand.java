@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class SethomeCommand extends JavaPlugin implements CommandExecutor {
+public class SethomeCommand implements CommandExecutor {
 
 
     @Override
@@ -15,14 +15,14 @@ public class SethomeCommand extends JavaPlugin implements CommandExecutor {
         if(command.getName().equalsIgnoreCase("sethome"))
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                String uuid = p.getUniqueId().toString();
-                getConfig().set("uuid.world", p.getLocation().getWorld().getName());
-                getConfig().set("uuid.x", p.getLocation().getX());
-                getConfig().set("uuid.y", p.getLocation().getY());
-                getConfig().set("uuid.z", p.getLocation().getZ());
-                getConfig().set("uuid.pitch", p.getEyeLocation().getPitch());
-                getConfig().set("uuid.yaw", p.getEyeLocation().getYaw());
-                saveConfig();
+//                String uuid = p.getUniqueId().toString();
+//                getConfig().set("uuid.world", p.getLocation().getWorld().getName());
+//                getConfig().set("uuid.x", p.getLocation().getX());
+//                getConfig().set("uuid.y", p.getLocation().getY());
+//                getConfig().set("uuid.z", p.getLocation().getZ());
+//                getConfig().set("uuid.pitch", p.getEyeLocation().getPitch());
+//                getConfig().set("uuid.yaw", p.getEyeLocation().getYaw());
+//                saveConfig();
             }
             else {
                 sender.sendMessage("Tylko gracze moga uzywac tej komendy");
