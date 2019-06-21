@@ -26,6 +26,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MatiPlugin extends JavaPlugin implements Listener {
 
+
+
+    public void loadConfiguration() {
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+    }
+
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this,this);
@@ -36,6 +43,8 @@ public class MatiPlugin extends JavaPlugin implements Listener {
         getCommand("dzien").setExecutor(new CommandDzien());
         getCommand("noc").setExecutor(new CommandNoc());
         getCommand("gm").setExecutor(new CommandGm());
+        getCommand("sethome").setExecutor(new SethomeCommand());
+
     }
 
     @Override
@@ -86,5 +95,6 @@ public class MatiPlugin extends JavaPlugin implements Listener {
                 e.setCancelled(true);
             }
         }
+
 
 }

@@ -17,3 +17,6 @@ commands:
   gm:
     description: "Wybierz jeden z trybów gamemode(1 - Survival, 2 - Creative, 3 - Adventure, 4 - Spectator), tyle, że szybciej"
     usage: /gm
+  sethome:
+    description: "Ustawiasz home"
+    usage: /sethome
