@@ -1,0 +1,19 @@
+name: MatiPlugin
+version: 1.0
+main: me.jokur.nauka.MatiPlugin
+commands:
+  gracze:
+    description: "Pokazuje liczbe graczy"
+    usage: /gracze
+  ulecz:
+    description: "Ulecza o wskazana ilosc serduszek"
+    usage: /ulecz
+  dzien:
+    description: "Nastaje dzien"
+    usage: /dzien
+  noc:
+    description: "Nastaje noc"
+    usage: /noc
+  gm:
+    description: "Wybierz jeden z trybów gamemode(1 - Survival, 2 - Creative, 3 - Adventure, 4 - Spectator), tyle, że szybciej"
+    usage: /gm
