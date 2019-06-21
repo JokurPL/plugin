@@ -110,6 +110,7 @@ public class MatiPlugin extends JavaPlugin implements Listener {
                 getConfig().set(uuid + ".z", p.getLocation().getZ());
                 getConfig().set(uuid + ".pitch", p.getEyeLocation().getPitch());
                 getConfig().set(uuid + ".yaw", p.getEyeLocation().getYaw());
+                saveConfig();
                 sender.sendMessage(ChatColor.GREEN + "Ustawiłeś home");
                 return true;
             }
