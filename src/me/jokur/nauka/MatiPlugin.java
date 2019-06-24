@@ -32,6 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class MatiPlugin extends JavaPlugin implements Listener {
 
@@ -45,6 +46,7 @@ public class MatiPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this,this);
         getServer().getConsoleSender().sendMessage("Plugin " + ChatColor.AQUA + Bukkit.getPluginManager().getPlugin("MatiPlugin").getName() + ChatColor.WHITE + " wlaczony!");
         Bukkit.getWorlds().get(0).setThundering(false);
+
 
         getCommand("gracze").setExecutor(new CommandGracze());
         getCommand("dzien").setExecutor(new CommandDzien());
@@ -67,12 +69,27 @@ public class MatiPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+
+        Integer x = p.getStatistic(Statistic.MINE_BLOCK, Material.DIAMOND_ORE);
+
+        p.sendMessage(x.toString());
         if(p.hasPlayedBefore()) {
             e.setJoinMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " witaj na serwerze!");
         }
         else{
             p.setGameMode(GameMode.ADVENTURE);
             e.setJoinMessage(ChatColor.AQUA + p.getName() + ChatColor.YELLOW + " nowy gracz na serwerze!");
+        }
+    }
+
+    @EventHandler
+    public void opShow(AsyncPlayerChatEvent e) {
+        Player p = e.getPlayer();
+        if (p.isOp()) {
+            e.setFormat(ChatColor.WHITE + "[" + ChatColor.DARK_RED + "Administrator" + ChatColor.WHITE + "] " + p.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage());
+        }
+        else {
+            e.setFormat(ChatColor.WHITE + "[" + ChatColor.DARK_GRAY + "Gracz" + ChatColor.WHITE + "] " + p.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage());
         }
     }
 
@@ -186,8 +203,8 @@ public class MatiPlugin extends JavaPlugin implements Listener {
         double z = p.getLocation().getZ();
 
         if (e.getInventory().getType() == InventoryType.CHEST){
-            if (e.getCurrentItem().getType() == Material.DIAMOND) {
-                getServer().getConsoleSender().sendMessage(p.getName() + " bierze diamenty w skrzyni na x: " + x + " y: " + y + " z: " + z);
+            if (e.getCurrentItem().getType() == Material.DIAMOND || e.getCurrentItem().getType() == Material.DIAMOND_BLOCK) {
+                getServer().getConsoleSender().sendMessage(p.getName() + " robi cos z diaxami w skrzyni na x: " + x + " y: " + y + " z: " + z);
             }
             else {
                 getServer().getConsoleSender().sendMessage(p.getName() + " grzebie w skrzyni na x: " + x + " y: " + y + " z: " + z);
