@@ -3,13 +3,10 @@ version: 1.0
 main: me.jokur.nauka.MatiPlugin
 commands:
   gracze:
-    description: "Pokazuje liczbe graczy"
+    description: "Pokazuje liczbę graczy"
     usage: /gracze
-  ulecz:
-    description: "Ulecza o wskazana ilosc serduszek"
-    usage: /ulecz
   dzien:
-    description: "Nastaje dzien"
+    description: "Nastaje dzień"
     usage: /dzien
   noc:
     description: "Nastaje noc"
@@ -23,3 +20,15 @@ commands:
   home:
     description: "Tepasz się do home"
     usage: /home
+  pogoda:
+    description: "Ustawiasz pogodę na bezchmurną"
+    usage: /pogoda
+  sklep:
+    description: "Tepa cię do sklepu"
+    usage: /sklep
+  spawn:
+    description: "Tepa cię na spawn"
+    usage: /spawn
+  setsecurity:
+    description: "Ustawiasz obszar strzeżony"
+    usage: /setsecurity

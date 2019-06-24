@@ -3,31 +3,37 @@ package me.jokur.nauka;
 import org.apache.commons.lang.UnhandledException;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleUpdateEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.WeatherEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
 
 public class MatiPlugin extends JavaPlugin implements Listener {
-
-
 
     public void loadConfiguration() {
         getConfig().options().copyDefaults(true);
@@ -44,8 +50,13 @@ public class MatiPlugin extends JavaPlugin implements Listener {
         getCommand("dzien").setExecutor(new CommandDzien());
         getCommand("noc").setExecutor(new CommandNoc());
         getCommand("gm").setExecutor(new CommandGm());
+        getCommand("pogoda").setExecutor(new CommandPogoda());
+        getCommand("sklep").setExecutor(new CommandSklep());
+        getCommand("spawn").setExecutor(new CommandSpawn());
         getCommand("sethome").setExecutor(this);
         getCommand("home").setExecutor(this);
+        getCommand("setsecurity").setExecutor(this);
+
     }
 
     @Override
@@ -69,7 +80,7 @@ public class MatiPlugin extends JavaPlugin implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e)
     {
         Player p = e.getPlayer();
-        e.setQuitMessage(ChatColor.AQUA + p.getName() + ChatColor.RED + " żegnaj z  serwera!");
+        e.setQuitMessage(ChatColor.AQUA + p.getName() + ChatColor.RED + " odszedł od nas!");
     }
 
     @EventHandler
@@ -144,7 +155,44 @@ public class MatiPlugin extends JavaPlugin implements Listener {
                 sender.sendMessage("Tylko gracze moga uzywac tej komendy");
             }
         }
+        if(command.getName().equalsIgnoreCase("setsecurity")) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+                String uuid = p.getUniqueId().toString();
+                getConfig().set("security."+p.getName()+".uuid", uuid);
+                getConfig().set("security."+p.getName()+".world", p.getLocation().getWorld().getName());
+                getConfig().set("security."+p.getName()+".x", p.getLocation().getX());
+                getConfig().set("security."+p.getName()+".y", p.getLocation().getY());
+                getConfig().set("security."+p.getName()+".z", p.getLocation().getZ());
+                saveConfig();
+                sender.sendMessage(ChatColor.GREEN + "Ustawiłeś strzeżony obszar");
+                return true;
+            }
+            else {
+                sender.sendMessage("Tylko gracze moga uzywac tej komendy");
+                return true;
+            }
+        }
         return true;
+    }
+
+    @EventHandler
+    public void stealSecurity(InventoryClickEvent e) {
+        Inventory inv = e.getClickedInventory();
+        Player p = (Player) e.getWhoClicked();
+
+        double x = p.getLocation().getX();
+        double y = p.getLocation().getY();
+        double z = p.getLocation().getZ();
+
+        if (e.getInventory().getType() == InventoryType.CHEST){
+            if (e.getCurrentItem().getType() == Material.DIAMOND) {
+                getServer().getConsoleSender().sendMessage(p.getName() + " bierze diamenty w skrzyni na x: " + x + " y: " + y + " z: " + z);
+            }
+            else {
+                getServer().getConsoleSender().sendMessage(p.getName() + " grzebie w skrzyni na x: " + x + " y: " + y + " z: " + z);
+            }
+        }
     }
 
 }
